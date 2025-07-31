@@ -8,7 +8,7 @@ docker-compose up --build
 
 ---
 
-## Архитектура
+
 
 1. **Booking Service**
    
