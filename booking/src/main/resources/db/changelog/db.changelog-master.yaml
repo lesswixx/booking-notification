@@ -1,0 +1,303 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1-create-users-table
+      author: me
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+  - changeSet:
+      id: 2-create-doctor-table
+      author: me
+      changes:
+        - createTable:
+            tableName: doctor
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: specialty
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+
+  - changeSet:
+      id: 3-create-slot-table
+      author: me
+      changes:
+        - createTable:
+            tableName: slot
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: doctor_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: date_time
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: booked
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: slot
+            baseColumnNames: doctor_id
+            referencedTableName: doctor
+            referencedColumnNames: id
+            constraintName: fk_slot_doctor
+
+  - changeSet:
+      id: 4-create-appointment-table
+      author: me
+      changes:
+        - createTable:
+            tableName: appointment
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: doctor_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: slot_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: date_time
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: appointment
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_appointment_user
+        - addForeignKeyConstraint:
+            baseTableName: appointment
+            baseColumnNames: doctor_id
+            referencedTableName: doctor
+            referencedColumnNames: id
+            constraintName: fk_appointment_doctor
+        - addForeignKeyConstraint:
+            baseTableName: appointment
+            baseColumnNames: slot_id
+            referencedTableName: slot
+            referencedColumnNames: id
+            constraintName: fk_appointment_slot
+
+  - changeSet:
+      id: 5-add-index-appointment-date_time
+      author: me
+      changes:
+        - createIndex:
+            tableName: appointment
+            indexName: idx_appointment_date_time
+            columns:
+              - column:
+                  name: date_time
+
+  - changeSet:
+      id: 6-add-unique-constraint-on-appointment-slot
+      author: me
+      changes:
+        - addUniqueConstraint:
+            tableName: appointment
+            columnNames: slot_id
+            constraintName: uq_appointment_slot
+
+  - changeSet:
+      id: 7-add-index-slot-doctor-booked-date_time
+      author: me
+      changes:
+        - createIndex:
+            tableName: slot
+            indexName: idx_slot_doctor_booked_date_time
+            columns:
+              - column: { name: doctor_id }
+              - column: { name: booked }
+              - column: { name: date_time }
+
+  - changeSet:
+      id: 8-add-index-appointment-user_id
+      author: me
+      changes:
+        - createIndex:
+            tableName: appointment
+            indexName: idx_appointment_user_id
+            columns:
+              - column: { name: user_id }
+
+  - changeSet:
+      id: 9-add-index-appointment-doctor_id
+      author: me
+      changes:
+        - createIndex:
+            tableName: appointment
+            indexName: idx_appointment_doctor_id
+            columns:
+              - column: { name: doctor_id }
+
+  - changeSet:
+      id: 10-add-composite-index-appointment-user-date_time
+      author: me
+      changes:
+        - createIndex:
+            tableName: appointment
+            indexName: idx_appointment_user_date_time
+            columns:
+              - column: { name: user_id }
+              - column: { name: date_time }
+
+  - changeSet:
+      id: 11-insert-initial-users
+      author: me
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: 1
+              - column:
+                  name: name
+                  value: "Alice"
+              - column:
+                  name: email
+                  value: "alice@example.com"
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: 2
+              - column:
+                  name: name
+                  value: "Bob"
+              - column:
+                  name: email
+                  value: "bob@example.com"
+
+  - changeSet:
+      id: 12-insert-initial-doctors
+      author: me
+      changes:
+        - insert:
+            tableName: doctor
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: 1
+              - column:
+                  name: name
+                  value: "Dr. Smith"
+              - column:
+                  name: specialty
+                  value: "Cardiology"
+        - insert:
+            tableName: doctor
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: 2
+              - column:
+                  name: name
+                  value: "Dr. Jones"
+              - column:
+                  name: specialty
+                  value: "Dermatology"
+
+  - changeSet:
+      id: 13-insert-initial-slots
+      author: me
+      changes:
+        - insert:
+            tableName: slot
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: 1
+              - column:
+                  name: doctor_id
+                  valueNumeric: 1
+              - column:
+                  name: date_time
+                  valueDate: "2025-08-01T09:00:00"
+        - insert:
+            tableName: slot
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: 2
+              - column:
+                  name: doctor_id
+                  valueNumeric: 1
+              - column:
+                  name: date_time
+                  valueDate: "2025-08-01T10:00:00"
+        - insert:
+            tableName: slot
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: 3
+              - column:
+                  name: doctor_id
+                  valueNumeric: 2
+              - column:
+                  name: date_time
+                  valueDate: "2025-08-02T11:00:00"
