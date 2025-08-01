@@ -1,4 +1,3 @@
-// dto/SlotDto.kt
 package com.example.booking_service.DTO
 
 import java.time.LocalDateTime

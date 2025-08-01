@@ -1,4 +1,3 @@
-// src/main/kotlin/com/example/notification_service/service/NotificationScheduler.kt
 package com.example.notification_service.service
 
 import com.example.notification_service.model.AppointmentCreatedEvent
@@ -19,7 +18,6 @@ class NotificationScheduler(
     private val log = LoggerFactory.getLogger(NotificationScheduler::class.java)
     private val zone: ZoneId = ZoneId.systemDefault()
 
-    /** Планируем два напоминания для визита */
     fun scheduleReminders(event: AppointmentCreatedEvent) {
         scheduleOne(ReminderType.DAY_BEFORE, event.dateTime.minusDays(1), event)
         scheduleOne(ReminderType.TWO_HOURS_BEFORE, event.dateTime.minusHours(2), event)
