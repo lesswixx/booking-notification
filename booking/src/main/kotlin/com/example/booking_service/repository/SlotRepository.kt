@@ -11,10 +11,12 @@ import java.util.*
 @Repository
 interface SlotRepository : JpaRepository<Slot, Long> {
 
+
+
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     override fun findById(id: Long): Optional<Slot>
 
-    fun findAllByDoctorIdAndBookedFalse(doctorId: Long): List<Slot>
     fun findByDoctorIdAndBookedFalse(doctorId: Long): List<Slot>
+
 
 }

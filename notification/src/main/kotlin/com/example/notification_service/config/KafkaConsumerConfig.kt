@@ -1,6 +1,9 @@
 package com.example.notification_service.config
 
 import com.example.notification_service.model.AppointmentCreatedEvent
+import org.apache.kafka.clients.consumer.ConsumerConfig.AUTO_OFFSET_RESET_CONFIG
+import org.apache.kafka.clients.consumer.ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG
+import org.apache.kafka.clients.consumer.ConsumerConfig.GROUP_ID_CONFIG
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
@@ -24,9 +27,9 @@ class KafkaConsumerConfig(
         }
 
         val props = mapOf(
-            org.apache.kafka.clients.consumer.ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG to bootstrapServers,
-            org.apache.kafka.clients.consumer.ConsumerConfig.GROUP_ID_CONFIG to groupId,
-            org.apache.kafka.clients.consumer.ConsumerConfig.AUTO_OFFSET_RESET_CONFIG to "earliest"
+            BOOTSTRAP_SERVERS_CONFIG to bootstrapServers,
+            GROUP_ID_CONFIG to groupId,
+            AUTO_OFFSET_RESET_CONFIG to "earliest"
         )
 
         return DefaultKafkaConsumerFactory(
@@ -39,10 +42,9 @@ class KafkaConsumerConfig(
     @Bean(name = ["kafkaListenerContainerFactory"])
     fun kafkaListenerContainerFactory(
         consumerFactory: ConsumerFactory<String, AppointmentCreatedEvent>
-    ): ConcurrentKafkaListenerContainerFactory<String, AppointmentCreatedEvent> {
-        return ConcurrentKafkaListenerContainerFactory<String, AppointmentCreatedEvent>().apply {
-            setConsumerFactory(consumerFactory)
-            setConcurrency(1)
-        }
-    }
+    ): ConcurrentKafkaListenerContainerFactory<String, AppointmentCreatedEvent> =
+      ConcurrentKafkaListenerContainerFactory<String, AppointmentCreatedEvent>().apply {
+          setConsumerFactory(consumerFactory)
+          setConcurrency(1)
+      }
 }

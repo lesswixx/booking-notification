@@ -33,8 +33,6 @@ class AppointmentEventListener(
 
         scheduler.scheduleReminders(event)
     }
-    fun handle(event: AppointmentCreatedEvent) {
-        log.info("Получено событие: topic=appointments.created, payload=$event")
-        scheduler.scheduleReminders(event)
-    }
+
+
 }

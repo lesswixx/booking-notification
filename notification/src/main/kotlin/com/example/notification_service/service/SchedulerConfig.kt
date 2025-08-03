@@ -8,12 +8,12 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
 @Configuration
 class SchedulerConfig {
 
-    @Bean
-    fun taskScheduler(): TaskScheduler {
-        val tpts = ThreadPoolTaskScheduler()
-        tpts.setPoolSize(5)
-        tpts.setThreadNamePrefix("notif-sched-")
-        tpts.initialize()
-        return tpts
+  @Bean
+  fun taskScheduler(): TaskScheduler =
+    ThreadPoolTaskScheduler().apply {
+      poolSize = 5
+      setThreadNamePrefix("notif-sched-")
+      initialize()
     }
+
 }

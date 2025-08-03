@@ -171,7 +171,6 @@ databaseChangeLog:
               - column: { name: doctor_id }
               - column: { name: booked }
               - column: { name: date_time }
-
   - changeSet:
       id: 8-add-index-appointment-user_id
       author: me
@@ -301,3 +300,15 @@ databaseChangeLog:
               - column:
                   name: date_time
                   valueDate: "2025-08-02T11:00:00"
+        - insert:
+            tableName: slot
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: 4
+              - column:
+                  name: doctor_id
+                  valueNumeric: 2
+              - column:
+                  name: date_time
+                  valueDate: "2025-08-04T20:00:00"

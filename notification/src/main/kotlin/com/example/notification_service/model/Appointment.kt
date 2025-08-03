@@ -20,15 +20,6 @@ data class Appointment(
     @Column(name = "date_time", nullable = false)
     var dateTime: LocalDateTime = LocalDateTime.now()
 ) {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-        other as Appointment
-
-        return id == other.id
-    }
-
-    override fun hashCode(): Int = javaClass.hashCode()
 
     @Override
     override fun toString(): String {

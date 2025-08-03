@@ -3,7 +3,7 @@ package com.example.booking_service.kafka
 import com.example.booking_service.common.AppointmentCreatedEvent
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Component
-import org.springframework.transaction.support.TransactionSynchronizationAdapter
+import org.springframework.transaction.support.TransactionSynchronization
 import org.springframework.transaction.support.TransactionSynchronizationManager
 
 @Component
@@ -17,17 +17,17 @@ class AppointmentEventPublisher(
     fun publishAfterCommit(event: AppointmentCreatedEvent) {
         if (TransactionSynchronizationManager.isSynchronizationActive()) {
             TransactionSynchronizationManager.registerSynchronization(
-                object : TransactionSynchronizationAdapter() {
+                object : TransactionSynchronization {
                     override fun afterCommit() {
-                        kafkaTemplate.executeInTransaction {
-                            it.send(TOPIC, event).get()
+                        kafkaTemplate.executeInTransaction { producer ->
+                            producer.send(TOPIC, event).get()
                         }
                     }
                 }
             )
         } else {
-            kafkaTemplate.executeInTransaction {
-                it.send(TOPIC, event).get()
+            kafkaTemplate.executeInTransaction { producer ->
+                producer.send(TOPIC, event).get()
             }
         }
     }

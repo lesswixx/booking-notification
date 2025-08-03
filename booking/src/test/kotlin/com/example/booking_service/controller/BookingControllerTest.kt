@@ -1,12 +1,13 @@
 package com.example.booking_service.controller
 
 import com.example.booking_service.DTO.AppointmentDto
-import com.example.booking_service.DTO.BookingRequestDto
 import com.example.booking_service.DTO.SlotDto
 import com.example.booking_service.Exception.ResourceNotFoundException
 import com.example.booking_service.Exception.SlotAlreadyBookedException
+import com.example.booking_service.DTO.BookingRequestDto
 import com.example.booking_service.service.BookingServicee
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.hibernate.internal.util.collections.CollectionHelper.listOf
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.mock

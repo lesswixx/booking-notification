@@ -1,16 +1,22 @@
 package com.example.booking_service.model
 
-import com.example.booking_service.model.Doctor
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
 @Entity
+@Table(name = "slot")
 data class Slot(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0,
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "doctor_id", nullable = false)
+    val doctor: Doctor,
+
+    @Column(name = "date_time", nullable = false)
     val dateTime: LocalDateTime,
-    var booked: Boolean = false,
-    @ManyToOne
-    @JoinColumn(name = "doctor_id")
-    val doctor: Doctor
+
+    @Column(nullable = false)
+    var booked: Boolean = false
 )
